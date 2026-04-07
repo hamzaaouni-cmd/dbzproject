@@ -61,37 +61,45 @@ function getInputValue() {
             item.onclick = function () {
                 tries++;
 
-                const triesContainer = document.getElementById("triesContainer");
+                fetch("https://dragonball-api.com/api/characters/" + r.id)
+                .then(res => res.json())
+                .then(fullChar => {
 
-                let attemptDiv = document.createElement("div");
-                attemptDiv.style.border = "1px solid #ccc";
-                attemptDiv.style.padding = "5px";
-                attemptDiv.style.marginBottom = "5px";
-                attemptDiv.style.display = "inline-block";
+                    const triesContainer = document.getElementById("triesContainer");
 
-                let namcolor = r.name === single.name ? "green" : "red";
-                let raceColor = r.race === single.race ? "green" : "red";
-                let affColor = r.affiliation === single.affiliation ? "green" : "red";
-                let genderColor = r.gender === single.gender ? "green" : "red";
+                    let attemptDiv = document.createElement("div");
+                    attemptDiv.style.border = "1px solid #ccc";
+                    attemptDiv.style.padding = "5px";
+                    attemptDiv.style.marginBottom = "5px";
+                    attemptDiv.style.display = "inline-block";
 
-                attemptDiv.innerHTML =
-                    "<b>" + r.name + "</b><br>" +
-                    "Nom: <span style=\'color:" + namcolor + "\'>" + (r.name || "Inconnue") + "</span><br>" +
-                    "Race: <span style=\'color:" + raceColor + "\'>" + (r.race || "Inconnue") + "</span><br>" +
-                    "Affiliation: <span style=\'color:" + affColor + "\'>" + (r.affiliation || "Inconnue") + "</span><br>" +
-                    "Genre: <span style=\'color:" + genderColor + "\'>" + (r.gender || "Inconnu") + "</span>";
+                    let namcolor = fullChar.name === single.name ? "green" : "red";
+                    let raceColor = fullChar.race === single.race ? "green" : "red";
+                    let originplanetColor = (fullChar.originPlanet && single.originPlanet && fullChar.originPlanet.name === single.originPlanet.name) ? "green" : "red";
+                    let affColor = fullChar.affiliation === single.affiliation ? "green" : "red";
+                    let genderColor = fullChar.gender === single.gender ? "green" : "red";
 
-                triesContainer.appendChild(attemptDiv);
+                    attemptDiv.innerHTML =
+                        "<b>" + fullChar.name + "</b><br>" +
+                        "Nom: <span style=\'color:" + namcolor + "\'>" + (fullChar.name || "Inconnue") + "</span><br>" +
+                        "Race: <span style=\'color:" + raceColor + "\'>" + (fullChar.race || "Inconnue") + "</span><br>" +
+                        "Planète: <span style=\'color:" + originplanetColor + "\'>" + ((fullChar.originPlanet && fullChar.originPlanet.name) ? fullChar.originPlanet.name : "Inconnue") + "</span><br>" +
+                        "Affiliation: <span style=\'color:" + affColor + "\'>" + (fullChar.affiliation || "Inconnue") + "</span><br>" +
+                        "Genre: <span style=\'color:" + genderColor + "\'>" + (fullChar.gender || "Inconnu") + "</span>";
 
-                if (r.name === single.name) {
-                    alert("Bravo ! Tu as deviné le personnage !");
-                    document.querySelector("#myDIV h2").innerText = single.name;
-                    document.querySelector("#targetImg").src = single.image;
-                } else if (tries >= maxTries) {
-                    alert("Tu as utilisé tous tes essais ! Le personnage était " + single.name);
-                } else {
-                    alert("Ce n\'est pas le bon personnage. Essais restants : " + (maxTries - tries));
-                }
+                    triesContainer.appendChild(attemptDiv);
+
+                    if (fullChar.name === single.name) {
+                        alert("Bravo ! Tu as deviné le personnage !");
+                        document.querySelector("#myDIV h2").innerText = single.name;
+                        document.querySelector("#targetImg").src = single.image;
+                    } else if (tries >= maxTries) {
+                        alert("Tu as utilisé tous tes essais ! Le personnage était " + single.name);
+                    } else {
+                        alert("Ce n\'est pas le bon personnage. Essais restants : " + (maxTries - tries));
+                    }
+
+                });
             };
 
             container.appendChild(item);
