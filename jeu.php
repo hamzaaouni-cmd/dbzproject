@@ -16,12 +16,12 @@ $responseAll = file_get_contents($urlAll);
 echo "<div id='myDIV'>
 <h2 style='text-align:center;'>Qui est-ce ?</h2>
 <img id='targetImg' src='' style='border-radius:30px; width:200px; display:block; margin:auto;' /><br>
-
 <input id='myInput' type='text' oninput='getInputValue()'>
+<div id='displayText' style='margin-top:20px;'></div>
 
-<div id='displayText'></div>
+<div id='displayText' style='margin-top:20px;'></div>
 
-<h3>Essais précédents :</h3>
+<h3>Essais pr�c�dents :</h3>
 <div id='triesContainer'></div>
 
 </div>";
@@ -49,14 +49,22 @@ function getInputValue() {
     let container = document.getElementById("displayText");
     container.innerHTML = "";
 
+    container.style.display = "flex";
+    container.style.flexDirection = "row"; 
+    container.style.gap = "15px";   
+
     if (input.length > 0 && result.length > 0) {
         result.forEach(function (r) {
             let item = document.createElement("div");
+
+            item.style.display = "flex";
+            item.style.flexDirection = "column";
+            item.style.alignItems = "center";
             item.style.cursor = "pointer";
 
             item.innerHTML =
-                "<img src=\'" + r.image + "\' style=\'width:175px;height:175px;object-fit:contain;display:block;\'>" +
-                "<p>" + r.name + "</p>";
+                "<img src=\'" + r.image + "\' style=\'width:175px;height:175px;object-fit:contain;display:block;border-radius:15px;\'>" +
+                "<p style=\'margin-top:5px;text-align:center;\'>" + r.name + "</p>";
 
             item.onclick = function () {
                 tries++;
@@ -64,7 +72,6 @@ function getInputValue() {
                 fetch("https://dragonball-api.com/api/characters/" + r.id)
                 .then(res => res.json())
                 .then(fullChar => {
-
                     const triesContainer = document.getElementById("triesContainer");
 
                     let attemptDiv = document.createElement("div");
@@ -83,22 +90,21 @@ function getInputValue() {
                         "<b>" + fullChar.name + "</b><br>" +
                         "Nom: <span style=\'color:" + namcolor + "\'>" + (fullChar.name || "Inconnue") + "</span><br>" +
                         "Race: <span style=\'color:" + raceColor + "\'>" + (fullChar.race || "Inconnue") + "</span><br>" +
-                        "Planète: <span style=\'color:" + originplanetColor + "\'>" + ((fullChar.originPlanet && fullChar.originPlanet.name) ? fullChar.originPlanet.name : "Inconnue") + "</span><br>" +
+                        "Plan�te: <span style=\'color:" + originplanetColor + "\'>" + ((fullChar.originPlanet && fullChar.originPlanet.name) ? fullChar.originPlanet.name : "Inconnue") + "</span><br>" +
                         "Affiliation: <span style=\'color:" + affColor + "\'>" + (fullChar.affiliation || "Inconnue") + "</span><br>" +
                         "Genre: <span style=\'color:" + genderColor + "\'>" + (fullChar.gender || "Inconnu") + "</span>";
 
                     triesContainer.appendChild(attemptDiv);
 
                     if (fullChar.name === single.name) {
-                        alert("Bravo ! Tu as deviné le personnage !");
+                        alert("Bravo ! Tu as devin� le personnage !");
                         document.querySelector("#myDIV h2").innerText = single.name;
                         document.querySelector("#targetImg").src = single.image;
                     } else if (tries >= maxTries) {
-                        alert("Tu as utilisé tous tes essais ! Le personnage était " + single.name);
+                        alert("Tu as utilis� tous tes essais ! Le personnage �tait " + single.name);
                     } else {
                         alert("Ce n\'est pas le bon personnage. Essais restants : " + (maxTries - tries));
                     }
-
                 });
             };
 
