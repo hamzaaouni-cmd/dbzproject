@@ -16,10 +16,10 @@ $responseAll = file_get_contents($urlAll);
 echo "<div id='myDIV'>
 <h2 style='text-align:center;'>Qui est-ce ?</h2>
 <img id='targetImg' src='' style='border-radius:30px; width:200px; display:block; margin:auto;' /><br>
-
 <input id='myInput' type='text' oninput='getInputValue()'>
+<div id='displayText' style='margin-top:20px;'></div>
 
-<div id='displayText'></div>
+<div id='displayText' style='margin-top:20px;'></div>
 
 <h3>Essais précédents :</h3>
 <div id='triesContainer'></div>
@@ -49,14 +49,22 @@ function getInputValue() {
     let container = document.getElementById("displayText");
     container.innerHTML = "";
 
+    container.style.display = "flex";
+    container.style.flexDirection = "row"; 
+    container.style.gap = "15px";   
+
     if (input.length > 0 && result.length > 0) {
         result.forEach(function (r) {
             let item = document.createElement("div");
+
+            item.style.display = "flex";
+            item.style.flexDirection = "column";
+            item.style.alignItems = "center";
             item.style.cursor = "pointer";
 
             item.innerHTML =
-                "<img src=\'" + r.image + "\' style=\'width:175px;height:175px;object-fit:contain;display:block;\'>" +
-                "<p>" + r.name + "</p>";
+                "<img src=\'" + r.image + "\' style=\'width:175px;height:175px;object-fit:contain;display:block;border-radius:15px;\'>" +
+                "<p style=\'margin-top:5px;text-align:center;\'>" + r.name + "</p>";
 
             item.onclick = function () {
                 tries++;
@@ -64,7 +72,6 @@ function getInputValue() {
                 fetch("https://dragonball-api.com/api/characters/" + r.id)
                 .then(res => res.json())
                 .then(fullChar => {
-
                     const triesContainer = document.getElementById("triesContainer");
 
                     let attemptDiv = document.createElement("div");
@@ -98,7 +105,6 @@ function getInputValue() {
                     } else {
                         alert("Ce n\'est pas le bon personnage. Essais restants : " + (maxTries - tries));
                     }
-
                 });
             };
 
