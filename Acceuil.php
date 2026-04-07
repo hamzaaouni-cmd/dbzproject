@@ -1,5 +1,4 @@
 <?php
-include 'planet.php';
 include 'functions.php';
 include 'base.php';
 
