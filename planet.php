@@ -33,7 +33,6 @@ if (isset($_GET['id_planet'])) {
     foreach ($planets as $planet) {
         echo "<div style='width:200px; border:1px solid #ccc; padding:10px; text-align:center; background:#f8f8f8; border-radius:10px;'>";
 
-        // Conteneur fixe pour l'image de la planète
         echo "<div style='width:150px; height:150px; margin:auto; display:flex; align-items:center; justify-content:center; border-radius:20px; overflow:hidden;'>";
         echo "<img src='{$planet['image']}' style='max-width:100%; max-height:100%; object-fit:contain;' alt='image'>";
         echo "</div><br>";
