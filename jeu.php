@@ -21,7 +21,7 @@ echo "<div id='myDIV'>
 
 <div id='displayText' style='margin-top:20px;'></div>
 
-<h3>Essais précédents :</h3>
+<h3>Essais pr�c�dents :</h3>
 <div id='triesContainer'></div>
 
 </div>";
@@ -90,18 +90,18 @@ function getInputValue() {
                         "<b>" + fullChar.name + "</b><br>" +
                         "Nom: <span style=\'color:" + namcolor + "\'>" + (fullChar.name || "Inconnue") + "</span><br>" +
                         "Race: <span style=\'color:" + raceColor + "\'>" + (fullChar.race || "Inconnue") + "</span><br>" +
-                        "Planète: <span style=\'color:" + originplanetColor + "\'>" + ((fullChar.originPlanet && fullChar.originPlanet.name) ? fullChar.originPlanet.name : "Inconnue") + "</span><br>" +
+                        "Plan�te: <span style=\'color:" + originplanetColor + "\'>" + ((fullChar.originPlanet && fullChar.originPlanet.name) ? fullChar.originPlanet.name : "Inconnue") + "</span><br>" +
                         "Affiliation: <span style=\'color:" + affColor + "\'>" + (fullChar.affiliation || "Inconnue") + "</span><br>" +
                         "Genre: <span style=\'color:" + genderColor + "\'>" + (fullChar.gender || "Inconnu") + "</span>";
 
                     triesContainer.appendChild(attemptDiv);
 
                     if (fullChar.name === single.name) {
-                        alert("Bravo ! Tu as deviné le personnage !");
+                        alert("Bravo ! Tu as devin� le personnage !");
                         document.querySelector("#myDIV h2").innerText = single.name;
                         document.querySelector("#targetImg").src = single.image;
                     } else if (tries >= maxTries) {
-                        alert("Tu as utilisé tous tes essais ! Le personnage était " + single.name);
+                        alert("Tu as utilis� tous tes essais ! Le personnage �tait " + single.name);
                     } else {
                         alert("Ce n\'est pas le bon personnage. Essais restants : " + (maxTries - tries));
                     }
