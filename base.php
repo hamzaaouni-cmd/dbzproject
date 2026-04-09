@@ -6,7 +6,15 @@
     <style>
         body {
             background-color: #272b33;
-            background-image: url("https://img-cache.ulule.com/display/84f0add316d7ce6029882f0a85fefbd968354b50/thumbnail/640x360/presales/0/9/6/2/6/1/162690/-1587997960958-copie.MaJjNlQ4S6.jpeg");
+            background-image: url("https://pokedle.net/img/Background.b373eb68.png");
+            background-attachment: fixed;
+            background-clip:border-box;
+
+            background-origin:padding-box;
+            background-position-x:50%;
+            background-position-y:50%;
+            background-repeat:no-repeat;
+            background-size:cover;
             color: #fbc02d;
             margin: 0;
         }
