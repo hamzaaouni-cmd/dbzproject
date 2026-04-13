@@ -90,7 +90,7 @@ function getInputValue() {
                         "<b>" + fullChar.name + "</b><br>" +
                         "Nom: <span style=\'color:" + namcolor + "\'>" + (fullChar.name || "Inconnue") + "</span><br>" +
                         "Race: <span style=\'color:" + raceColor + "\'>" + (fullChar.race || "Inconnue") + "</span><br>" +
-                        "Plan�te: <span style=\'color:" + originplanetColor + "\'>" + ((fullChar.originPlanet && fullChar.originPlanet.name) ? fullChar.originPlanet.name : "Inconnue") + "</span><br>" +
+                        "Planète: <span style=\'color:" + originplanetColor + "\'>" + ((fullChar.originPlanet && fullChar.originPlanet.name) ? fullChar.originPlanet.name : "Inconnue") + "</span><br>" +
                         "Affiliation: <span style=\'color:" + affColor + "\'>" + (fullChar.affiliation || "Inconnue") + "</span><br>" +
                         "Genre: <span style=\'color:" + genderColor + "\'>" + (fullChar.gender || "Inconnu") + "</span>";
 
