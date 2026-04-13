@@ -21,7 +21,7 @@ echo "<div id='myDIV'>
 
 <div id='displayText' style='margin-top:20px;'></div>
 
-<h3>Essais pr�c�dents :</h3>
+<h3>Essais précédents :</h3>
 <div id='triesContainer'></div>
 
 </div>";
@@ -97,11 +97,11 @@ function getInputValue() {
                     triesContainer.appendChild(attemptDiv);
 
                     if (fullChar.name === single.name) {
-                        alert("Bravo ! Tu as devin� le personnage !");
+                        alert("Bravo ! Tu as deviné le personnage !");
                         document.querySelector("#myDIV h2").innerText = single.name;
                         document.querySelector("#targetImg").src = single.image;
                     } else if (tries >= maxTries) {
-                        alert("Tu as utilis� tous tes essais ! Le personnage �tait " + single.name);
+                        alert("Tu as utilise tous tes essais ! Le personnage était " + single.name);
                     } else {
                         alert("Ce n\'est pas le bon personnage. Essais restants : " + (maxTries - tries));
                     }

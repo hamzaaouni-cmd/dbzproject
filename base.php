@@ -6,7 +6,7 @@
     <style>
         body {
             background-color: #272b33;
-            background-image: url("https://pokedle.net/img/Background.b373eb68.png");
+            background-image: url("illustration.png");
             background-attachment: fixed;
             background-clip:border-box;
 
@@ -21,7 +21,7 @@
     </style>
 </head>
 <body>
-<nav style="background-color: #FFFFFF; padding: 40px; text-align: center;">
+<nav style="background-color: #FFFFFF; padding: 10px; text-align: center;">
     <a href="Acceuil.php">Accueil</a>
     <a href="index.php">Personnages</a>
     <a href="planet.php">Planètes</a>
