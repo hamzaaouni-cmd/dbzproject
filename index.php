@@ -8,14 +8,20 @@ if (isset($_GET['id'])) {
 
     $id = $_GET['id'];
 
-    $sql = "SELECT * FROM characters WHERE id = :id";
+    $sql = "
+    SELECT characters.*, planets.name AS planet_name
+    FROM characters
+    JOIN planets ON characters.planet_id = planets.id
+    WHERE characters.id = :id
+    ";
+
     $q = $db->prepare($sql);
     $q->execute(['id' => $id]);
     $character = $q->fetch(PDO::FETCH_ASSOC);
 
     if ($character) {
 
-        // 🔥 FOND UNIQUEMENT AUTOUR DU PERSONNAGE
+        // 🔥 FOND PERSONNAGE (inchangé)
         echo "<div style='
             background-image:url(\"images/bg.jpg\");
             background-size:cover;
@@ -24,11 +30,43 @@ if (isset($_GET['id'])) {
             border-radius:20px;
         '>";
 
-        afficherCharacter($character);
+        echo "
+        <div style='
+            background: rgba(0,0,0,0.7);
+            color: orange;
+            padding:20px;
+            border-radius:20px;
+            max-width:600px;
+            margin:auto;
+            text-align:center;
+        '>
 
-        echo "</div>"; // FIN DU FOND
+            <h2>{$character['name']} (Forme de base)</h2>
 
-        // ❌ PAS DE FOND POUR LES TRANSFORMATIONS
+            <img src='{$character['image']}' 
+                 style='border-radius:30px; width:200px; display:block; margin:auto;'><br>
+
+            <p>{$character['description']}</p>
+
+            <p>KI de base: {$character['ki']}</p>
+            <p>KI Maximum: {$character['maxKi']}</p>
+            <p>Race: {$character['race']}</p>
+            <p>Genre: {$character['gender']}</p>
+            <p>Equipe: {$character['affiliation']}</p>
+
+            <p>Planète: {$character['planet_name']}</p>
+
+            <a href='planet.php?id_planet={$character['planet_id']}' 
+               class='btn btn-primary'>
+               Infos Planète
+            </a>
+
+        </div>
+        ";
+
+        echo "</div>";
+
+        // 🔥 TRANSFORMATIONS (FOND CORRIGÉ)
         $sql = "SELECT * FROM transformations WHERE character_id = :id";
         $q = $db->prepare($sql);
         $q->execute(['id' => $id]);
@@ -40,7 +78,17 @@ if (isset($_GET['id'])) {
             echo "<div style='display:flex; flex-wrap:wrap; gap:20px; justify-content:center;'>";
 
             foreach ($transformations as $transformation) {
-                echo "<div style='width:200px; border:1px solid #ccc; padding:10px; text-align:center; background:#f8f8f8; border-radius:10px;'>";
+
+                // 🔥 PLUS DE FOND BLANC
+                echo "<div style='
+                    width:200px;
+                    border:1px solid #444;
+                    padding:10px;
+                    text-align:center;
+                    background: rgba(255, 175, 64, 0.3);
+                    color:white;
+                    border-radius:10px;
+                '>";
 
                 echo "<div style='width:175px; height:250px; margin:auto; display:flex; align-items:center; justify-content:center; border-radius:20px; overflow:hidden;'>";
                 echo "<img src='{$transformation['image']}' style='max-width:100%; max-height:100%; object-fit:contain;'>";
@@ -58,7 +106,6 @@ if (isset($_GET['id'])) {
 
 } else {
 
-    // ❌ PAS DE FOND SUR LA LISTE
     $sql = "SELECT * FROM characters";
     $query = $db->query($sql);
     $characters = $query->fetchAll();
@@ -69,7 +116,16 @@ if (isset($_GET['id'])) {
     $i = 0;
     foreach ($characters as $character) {
 
-        echo "<div style='width:200px; border:1px solid #ccc; padding:10px; text-align:center; background:#f8f8f8; border-radius:10px;'>";
+        // 🔥 PLUS DE FOND BLANC
+        echo "<div style='
+            width:200px;
+            border:1px solid #444;
+            padding:10px;
+            text-align:center;
+            background: rgba(255, 175, 64, 0.3);
+            color:white;
+            border-radius:10px;
+        '>";
 
         echo "<div style='width:175px; height:250px; margin:auto; display:flex; align-items:center; justify-content:center; border-radius:20px; overflow:hidden;'>";
         echo "<img src='{$character['image']}' style='max-width:100%; max-height:100%; object-fit:contain;'>";
