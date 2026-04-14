@@ -1,116 +1,232 @@
 <?php
 include 'base.php';
 
-$exclusions = [36,41,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62];
+// CONNEXION
+$db = new PDO('mysql:host=localhost;dbname=dbz;charset=utf8', 'root', '');
 
-do {
-    $id = rand(1, 78);
-} while (in_array($id, $exclusions));
+// 🔥 JOIN avec planète
+$sql = "
+SELECT 
+    characters.*,
+    planets.name AS planet_name
+FROM characters
+LEFT JOIN planets ON characters.planet_id = planets.id
+";
 
-$url = "https://dragonball-api.com/api/characters/$id";
-$urlAll = "https://dragonball-api.com/api/characters?limit=100";
+$characters = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 
-$response = file_get_contents($url);
-$responseAll = file_get_contents($urlAll);
-
-echo "<div id='myDIV'>
-<h2 style='text-align:center;'>Qui est-ce ?</h2>
-<img id='targetImg' src='' style='border-radius:30px; width:200px; display:block; margin:auto;' /><br>
-<input id='myInput' type='text' oninput='getInputValue()'>
-<div id='displayText' style='margin-top:20px;'></div>
-
-<div id='displayText' style='margin-top:20px;'></div>
-
-<h3>Essais précédents :</h3>
-<div id='triesContainer'></div>
-
-</div>";
-
-echo "<button onclick='miFunction()'>Indice</button>";
-
-echo '<script>
-let single = ' . $response . ';
-let all = ' . $responseAll . ';
-let tries = 0;
-let maxTries = 10;
-
-function miFunction() {
-    alert("Indice : Race: " + (single.race || "Inconnue"));
-}
-
-function getInputValue() {
-    let input = document.getElementById("myInput").value.toLowerCase();
-    let perso = all.items;
-
-    let result = perso.filter(function(el) {
-        return el.name.toLowerCase().includes(input);
-    });
-
-    let container = document.getElementById("displayText");
-    container.innerHTML = "";
-
-    container.style.display = "flex";
-    container.style.flexDirection = "row"; 
-    container.style.gap = "15px";   
-
-    if (input.length > 0 && result.length > 0) {
-        result.forEach(function (r) {
-            let item = document.createElement("div");
-
-            item.style.display = "flex";
-            item.style.flexDirection = "column";
-            item.style.alignItems = "center";
-            item.style.cursor = "pointer";
-
-            item.innerHTML =
-                "<img src=\'" + r.image + "\' style=\'width:175px;height:175px;object-fit:contain;display:block;border-radius:15px;\'>" +
-                "<p style=\'margin-top:5px;text-align:center;\'>" + r.name + "</p>";
-
-            item.onclick = function () {
-                tries++;
-
-                fetch("https://dragonball-api.com/api/characters/" + r.id)
-                .then(res => res.json())
-                .then(fullChar => {
-                    const triesContainer = document.getElementById("triesContainer");
-
-                    let attemptDiv = document.createElement("div");
-                    attemptDiv.style.border = "1px solid #ccc";
-                    attemptDiv.style.padding = "5px";
-                    attemptDiv.style.marginBottom = "5px";
-                    attemptDiv.style.display = "inline-block";
-
-                    let namcolor = fullChar.name === single.name ? "green" : "red";
-                    let raceColor = fullChar.race === single.race ? "green" : "red";
-                    let originplanetColor = (fullChar.originPlanet && single.originPlanet && fullChar.originPlanet.name === single.originPlanet.name) ? "green" : "red";
-                    let affColor = fullChar.affiliation === single.affiliation ? "green" : "red";
-                    let genderColor = fullChar.gender === single.gender ? "green" : "red";
-
-                    attemptDiv.innerHTML =
-                        "<b>" + fullChar.name + "</b><br>" +
-                        "Nom: <span style=\'color:" + namcolor + "\'>" + (fullChar.name || "Inconnue") + "</span><br>" +
-                        "Race: <span style=\'color:" + raceColor + "\'>" + (fullChar.race || "Inconnue") + "</span><br>" +
-                        "Planète: <span style=\'color:" + originplanetColor + "\'>" + ((fullChar.originPlanet && fullChar.originPlanet.name) ? fullChar.originPlanet.name : "Inconnue") + "</span><br>" +
-                        "Affiliation: <span style=\'color:" + affColor + "\'>" + (fullChar.affiliation || "Inconnue") + "</span><br>" +
-                        "Genre: <span style=\'color:" + genderColor + "\'>" + (fullChar.gender || "Inconnu") + "</span>";
-
-                    triesContainer.appendChild(attemptDiv);
-
-                    if (fullChar.name === single.name) {
-                        alert("Bravo ! Tu as deviné le personnage !");
-                        document.querySelector("#myDIV h2").innerText = single.name;
-                        document.querySelector("#targetImg").src = single.image;
-                    } else if (tries >= maxTries) {
-                        alert("Tu as utilise tous tes essais ! Le personnage était " + single.name);
-                    } else {
-                        alert("Ce n\'est pas le bon personnage. Essais restants : " + (maxTries - tries));
-                    }
-                });
-            };
-
-            container.appendChild(item);
-        });
-    }
-}
-</script>';
+// RANDOM
+$single = $characters[array_rand($characters)];
 ?>
+
+<div class="game">
+
+    <h2>Qui est-ce ?</h2>
+
+    <img id="targetImg" src="" class="target"><br>
+
+    <input id="myInput" type="text" placeholder="Cherche un personnage..." oninput="getInputValue()">
+
+    <button onclick="miFunction()" class="btn">Indice</button>
+
+    <div id="displayText" class="suggestions"></div>
+
+    <h3>Essais :</h3>
+
+    <div class="header-row">
+        <div class="box-title">Nom</div>
+        <div class="box-title">Race</div>
+        <div class="box-title">Genre</div>
+        <div class="box-title">Affiliation</div>
+        <div class="box-title">Planète</div>
+    </div>
+
+    <div id="triesContainer"></div>
+
+</div>
+
+<style>
+
+    /* ===== GAME ===== */
+    .game{
+        margin-top:30px;
+        text-align:center;
+    }
+
+    /* INPUT */
+    #myInput{
+        padding:10px;
+        border-radius:10px;
+        border:none;
+        width:250px;
+    }
+
+    /* BUTTON */
+    .btn{
+        margin-top:10px;
+        padding:10px 15px;
+        border:none;
+        border-radius:10px;
+        background:orange;
+        cursor:pointer;
+    }
+
+    /* IMAGE */
+    .target{
+        width:200px;
+        border-radius:20px;
+    }
+
+    /* SUGGESTIONS */
+    .suggestions{
+        display:flex;
+        justify-content:center;
+        gap:15px;
+        margin-top:20px;
+    }
+
+    .suggestion{
+        cursor:pointer;
+        text-align:center;
+    }
+
+    .suggestion img{
+        width:80px;
+        height:80px;
+        object-fit:contain;
+    }
+
+    /* HEADER */
+    .header-row{
+        display:flex;
+        justify-content:center;
+        gap:10px;
+        margin-top:20px;
+    }
+
+    .box-title{
+        width:120px;
+        background:#333;
+        color:white;
+        padding:10px;
+        border-radius:10px;
+    }
+
+    /* ROW */
+    .try-row{
+        display:flex;
+        justify-content:center;
+        gap:10px;
+        margin-top:10px;
+    }
+
+    /* BOX */
+    .box{
+        width:120px;
+        padding:10px;
+        border-radius:10px;
+        color:white;
+    }
+
+    /* COLORS */
+    .green{ background:#2ecc71; }
+    .red{ background:#e74c3c; }
+
+    /* FLÈCHES */
+    .arrow-up::after{
+        content:" ↑";
+    }
+
+    .arrow-down::after{
+        content:" ↓";
+    }
+
+</style>
+
+<script>
+
+    let single = <?php echo json_encode($single); ?>;
+    let all = <?php echo json_encode($characters); ?>;
+
+    let tries = 0;
+    let maxTries = 10;
+
+    // 🔥 INDICE
+    function miFunction(){
+        alert("Indice : Race = " + (single.race || "?"));
+    }
+
+    // 🔥 COMPARAISON AVEC FLÈCHES
+    function compareValue(a,b){
+        if(!a || !b) return "red";
+
+        if(a == b) return "green";
+
+        // nombre → flèches
+        if(!isNaN(a) && !isNaN(b)){
+            return a > b ? "red arrow-down" : "red arrow-up";
+        }
+
+        return "red";
+    }
+
+    function getInputValue(){
+
+        let input = document.getElementById("myInput").value.toLowerCase();
+
+        let result = all.filter(el =>
+            el.name.toLowerCase().includes(input)
+        );
+
+        let container = document.getElementById("displayText");
+        container.innerHTML = "";
+
+        if(input.length > 0){
+
+            result.forEach(r => {
+
+                let item = document.createElement("div");
+                item.className = "suggestion";
+
+                item.innerHTML =
+                    "<img src='"+r.image+"'>" +
+                    "<p>"+r.name+"</p>";
+
+                item.onclick = function(){
+
+                    tries++;
+
+                    let triesContainer = document.getElementById("triesContainer");
+
+                    let row = document.createElement("div");
+                    row.className = "try-row";
+
+                    row.innerHTML =
+                        "<div class='box "+compareValue(r.name,single.name)+"'>"+r.name+"</div>" +
+                        "<div class='box "+compareValue(r.race,single.race)+"'>"+(r.race||"?")+"</div>" +
+                        "<div class='box "+compareValue(r.gender,single.gender)+"'>"+(r.gender||"?")+"</div>" +
+                        "<div class='box "+compareValue(r.affiliation,single.affiliation)+"'>"+(r.affiliation||"?")+"</div>" +
+                        "<div class='box "+compareValue(r.planet_name,single.planet_name)+"'>"+(r.planet_name||"?")+"</div>";
+
+                    triesContainer.appendChild(row);
+
+                    // WIN
+                    if(r.name === single.name){
+                        alert("🔥 GG !");
+                        document.getElementById("targetImg").src = single.image;
+                    }
+
+                    // LOSE
+                    if(tries >= maxTries){
+                        alert("❌ Perdu ! C'était " + single.name);
+                        document.getElementById("targetImg").src = single.image;
+                    }
+
+                };
+
+                container.appendChild(item);
+            });
+        }
+    }
+
+</script>

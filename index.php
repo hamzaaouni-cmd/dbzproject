@@ -15,8 +15,20 @@ if (isset($_GET['id'])) {
 
     if ($character) {
 
+        // 🔥 FOND UNIQUEMENT AUTOUR DU PERSONNAGE
+        echo "<div style='
+            background-image:url(\"images/bg.jpg\");
+            background-size:cover;
+            background-position:center;
+            padding:40px;
+            border-radius:20px;
+        '>";
+
         afficherCharacter($character);
 
+        echo "</div>"; // FIN DU FOND
+
+        // ❌ PAS DE FOND POUR LES TRANSFORMATIONS
         $sql = "SELECT * FROM transformations WHERE character_id = :id";
         $q = $db->prepare($sql);
         $q->execute(['id' => $id]);
@@ -42,13 +54,11 @@ if (isset($_GET['id'])) {
 
             echo "</div>";
         }
-            }
-
-
+    }
 
 } else {
 
-    $db = new PDO('mysql:host=localhost;dbname=dbz;charset=utf8', 'root', '');
+    // ❌ PAS DE FOND SUR LA LISTE
     $sql = "SELECT * FROM characters";
     $query = $db->query($sql);
     $characters = $query->fetchAll();
@@ -58,10 +68,13 @@ if (isset($_GET['id'])) {
 
     $i = 0;
     foreach ($characters as $character) {
+
         echo "<div style='width:200px; border:1px solid #ccc; padding:10px; text-align:center; background:#f8f8f8; border-radius:10px;'>";
+
         echo "<div style='width:175px; height:250px; margin:auto; display:flex; align-items:center; justify-content:center; border-radius:20px; overflow:hidden;'>";
         echo "<img src='{$character['image']}' style='max-width:100%; max-height:100%; object-fit:contain;'>";
         echo "</div><br>";
+
         echo "<h3>{$character['name']}</h3>";
         echo "<a href='index.php?id={$character['id']}' class='btn btn-primary'>Infos Personnages</a>";
         echo "</div>";
@@ -71,6 +84,7 @@ if (isset($_GET['id'])) {
             echo "<div style='flex-basis:100%; height:0;'></div>";
         }
     }
+
     echo "</div>";
 }
 ?>
