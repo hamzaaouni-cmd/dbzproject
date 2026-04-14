@@ -2,43 +2,49 @@
 include 'functions.php';
 include 'base.php';
 
+$db = new PDO('mysql:host=localhost;dbname=dbz;charset=utf8', 'root', '');
+
 if (isset($_GET['id'])) {
+
     $id = $_GET['id'];
-    $url = "https://dragonball-api.com/api/characters/$id";
 
-    $response = @file_get_contents($url);
-    if ($response === FALSE) {
-        die("Erreur lors de l'appel à l'API");
-    }
+    $sql = "SELECT * FROM characters WHERE id = :id";
+    $q = $db->prepare($sql);
+    $q->execute(['id' => $id]);
+    $character = $q->fetch(PDO::FETCH_ASSOC);
 
-    $character = json_decode($response, true);
+    if ($character) {
 
-    afficherCharacter($character);
+        afficherCharacter($character);
 
-    if (isset($character['transformations']) && !empty($character['transformations'])) {
-        echo "<h2 style='text-align:center;'>Transformations</h2>";
-        echo "<div style='display:flex; flex-wrap:wrap; justify-content:center; gap:20px;'>";
+        $sql = "SELECT * FROM transformations WHERE character_id = :id";
+        $q = $db->prepare($sql);
+        $q->execute(['id' => $id]);
+        $transformations = $q->fetchAll(PDO::FETCH_ASSOC);
 
-        $i = 0;
-        foreach ($character['transformations'] as $transformation) {
-            echo "<div style='width:220px; border:1px solid #ccc; padding:10px; text-align:center; background:#f8f8f8; border-radius:10px;'>";
+        if (!empty($transformations)) {
 
-            echo "<div style='width:200px; height:250px; margin:auto; background:#f8f8f8; display:flex; align-items:center; justify-content:center; border-radius:20px; overflow:hidden;'>";
-            echo "<img src='{$transformation['image']}' style='max-width:100%; max-height:100%; object-fit:contain;'>";
-            echo "</div><br>";
+            echo "<h2 style='text-align:center;'>Transformations</h2>";
+            echo "<div style='display:flex; flex-wrap:wrap; gap:20px; justify-content:center;'>";
 
-            echo ($i + 1) . ". {$transformation['name']}<br>";
-            echo "Ki: {$transformation['ki']}<br>";
-            echo "</div>";
+            foreach ($transformations as $transformation) {
+                echo "<div style='width:200px; border:1px solid #ccc; padding:10px; text-align:center; background:#f8f8f8; border-radius:10px;'>";
 
-            $i++;
-            if ($i % 5 == 0) {
-                echo "<div style='flex-basis:100%; height:0;'></div>";
+                echo "<div style='width:175px; height:250px; margin:auto; display:flex; align-items:center; justify-content:center; border-radius:20px; overflow:hidden;'>";
+                echo "<img src='{$transformation['image']}' style='max-width:100%; max-height:100%; object-fit:contain;'>";
+                echo "</div>";
+
+                echo "<p>{$transformation['name']}</p>";
+                echo "<p>Ki: {$transformation['ki']}</p>";
+
+                echo "</div>";
             }
-        }
 
-        echo "</div>";
-    }
+            echo "</div>";
+        }
+            }
+
+
 
 } else {
 
@@ -46,18 +52,6 @@ if (isset($_GET['id'])) {
     $sql = "SELECT * FROM characters";
     $query = $db->query($sql);
     $characters = $query->fetchAll();
-
-/*
-    $url = "https://dragonball-api.com/api/characters?limit=100";
-    $response = @file_get_contents($url);
-
-    if ($response === FALSE) {
-        die("Erreur lors de l'appel à l'API pour les personnages.");
-    }
-
-    $data = json_decode($response, true);
-    $characters = isset($data['items']) ? $data['items'] : [];
-*/
 
     echo "<h2 style='text-align:center;'>Liste de tous les personnages</h2>";
     echo "<div style='display:flex; flex-wrap:wrap; justify-content:center; gap:20px;'>";
