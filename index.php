@@ -41,6 +41,13 @@ if (isset($_GET['id'])) {
     }
 
 } else {
+
+    $db = new PDO('mysql:host=localhost;dbname=dbz;charset=utf8', 'root', '');
+    $sql = "SELECT * FROM characters";
+    $query = $db->query($sql);
+    $characters = $query->fetchAll();
+
+/*
     $url = "https://dragonball-api.com/api/characters?limit=100";
     $response = @file_get_contents($url);
 
@@ -50,6 +57,7 @@ if (isset($_GET['id'])) {
 
     $data = json_decode($response, true);
     $characters = isset($data['items']) ? $data['items'] : [];
+*/
 
     echo "<h2 style='text-align:center;'>Liste de tous les personnages</h2>";
     echo "<div style='display:flex; flex-wrap:wrap; justify-content:center; gap:20px;'>";
@@ -57,7 +65,6 @@ if (isset($_GET['id'])) {
     $i = 0;
     foreach ($characters as $character) {
         echo "<div style='width:200px; border:1px solid #ccc; padding:10px; text-align:center; background:#f8f8f8; border-radius:10px;'>";
-
         echo "<div style='width:175px; height:250px; margin:auto; display:flex; align-items:center; justify-content:center; border-radius:20px; overflow:hidden;'>";
         echo "<img src='{$character['image']}' style='max-width:100%; max-height:100%; object-fit:contain;'>";
         echo "</div><br>";
