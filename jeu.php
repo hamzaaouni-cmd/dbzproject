@@ -4,7 +4,7 @@ include 'base.php';
 // CONNEXION
 $db = new PDO('mysql:host=localhost;dbname=dbz;charset=utf8', 'root', '');
 
-// 🔥 JOIN avec planète
+// JOIN avec planète
 $sql = "
 SELECT 
     characters.*,
@@ -21,36 +21,63 @@ $single = $characters[array_rand($characters)];
 
 <div class="game">
 
-    <h2>Qui est-ce ?</h2>
+    <!-- ===== HAUT ===== -->
+    <div class="top-section">
+        <h2>Qui est-ce ?</h2>
 
-    <img id="targetImg" src="" class="target"><br>
+        <img id="targetImg" src="" class="target"><br>
 
-    <input id="myInput" type="text" placeholder="Cherche un personnage..." oninput="getInputValue()">
+        <input id="myInput" type="text" placeholder="Cherche un personnage..." oninput="getInputValue()">
 
-    <button onclick="miFunction()" class="btn">Indice</button>
+        <button onclick="miFunction()" class="btn">Indice</button>
 
-    <div id="displayText" class="suggestions"></div>
-
-    <h3>Essais :</h3>
-
-    <div class="header-row">
-        <div class="box-title">Nom</div>
-        <div class="box-title">Race</div>
-        <div class="box-title">Genre</div>
-        <div class="box-title">Affiliation</div>
-        <div class="box-title">Planète</div>
+        <div id="displayText" class="suggestions"></div>
     </div>
 
-    <div id="triesContainer"></div>
+    <!-- ===== BAS ===== -->
+    <div class="bottom-section">
+        <h3>Essais :</h3>
+
+        <div class="header-row">
+            <div class="box-title">Nom</div>
+            <div class="box-title">Race</div>
+            <div class="box-title">Genre</div>
+            <div class="box-title">Affiliation</div>
+            <div class="box-title">Planète</div>
+        </div>
+
+        <div id="triesContainer"></div>
+    </div>
 
 </div>
 
 <style>
 
-    /* ===== GAME ===== */
+    /* ===== GLOBAL ===== */
     .game{
         margin-top:30px;
         text-align:center;
+    }
+
+    /* ===== HAUT ===== */
+    .top-section{
+        background: rgba(78, 43, 7, 0.8);
+        padding:25px;
+        border-radius:20px;
+        display:block;
+        width:fit-content;
+        margin:0 auto;
+    }
+
+    /* ===== BAS ===== */
+    .bottom-section{
+        padding:25px;
+        border-radius:20px;
+        margin-top:25px;
+        display:block;
+        width:fit-content;
+        margin-left:auto;
+        margin-right:auto;
     }
 
     /* INPUT */
@@ -83,6 +110,7 @@ $single = $characters[array_rand($characters)];
         justify-content:center;
         gap:15px;
         margin-top:20px;
+        flex-wrap:wrap;
     }
 
     .suggestion{
@@ -151,18 +179,17 @@ $single = $characters[array_rand($characters)];
     let tries = 0;
     let maxTries = 10;
 
-    // 🔥 INDICE
+    // INDICE
     function miFunction(){
         alert("Indice : Race = " + (single.race || "?"));
     }
 
-    // 🔥 COMPARAISON AVEC FLÈCHES
+    // COMPARAISON
     function compareValue(a,b){
         if(!a || !b) return "red";
 
         if(a == b) return "green";
 
-        // nombre → flèches
         if(!isNaN(a) && !isNaN(b)){
             return a > b ? "red arrow-down" : "red arrow-up";
         }
@@ -212,7 +239,7 @@ $single = $characters[array_rand($characters)];
 
                     // WIN
                     if(r.name === single.name){
-                        alert("🔥 GG !");
+                        alert("🎉 GG !");
                         document.getElementById("targetImg").src = single.image;
                     }
 
