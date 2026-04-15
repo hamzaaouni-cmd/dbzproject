@@ -71,6 +71,7 @@ $single = $characters[array_rand($characters)];
 
     /* ===== BAS ===== */
     .bottom-section{
+        background: rgba(78, 43, 7, 0.8);
         padding:25px;
         border-radius:20px;
         margin-top:25px;
@@ -239,7 +240,7 @@ $single = $characters[array_rand($characters)];
 
                     // WIN
                     if(r.name === single.name){
-                        alert("🎉 GG !");
+                        alert("🎉 Bravo !");
                         document.getElementById("targetImg").src = single.image;
                     }
 
