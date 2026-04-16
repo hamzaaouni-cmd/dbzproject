@@ -15,8 +15,12 @@ LEFT JOIN planets ON characters.planet_id = planets.id
 
 $characters = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 
-// RANDOM
-$single = $characters[array_rand($characters)];
+$today = date('Y-m-d');
+$seed = strtotime($today);
+
+srand($seed);
+$index = rand(0, count($characters) - 1);
+$single = $characters[$index];
 ?>
 
 <div class="game">
