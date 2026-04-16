@@ -33,7 +33,7 @@ Une application web interactive pour les fans de Dragon Ball Z. Explorez les gue
 
 1.  **Prérequis** : Un serveur local (XAMPP, WAMP, ou MAMP).
 2.  **Base de données** :
-    * Créez une base de données nommée `dbz` dans votre interface phpMyAdmin.
+    * Créez une base de données nommée `database.sql` dans votre interface phpMyAdmin.
     * Importez votre fichier SQL (assurez-vous d'avoir les tables `characters`, `planets` et `transformations`).
 3.  **Configuration** :
     * Vérifiez la connexion dans `index.php` et `jeu.php` :
