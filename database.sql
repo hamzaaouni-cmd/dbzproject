@@ -186,7 +186,7 @@ INSERT INTO dbz.`characters`
 VALUES(31, 'Vegetto', '180 Billion', '10 800 000 000 000 000 000 000 000', 'Saiyan', 'Male', 'Fusion surpuissante de Goku et Vegeta via les boucles d''oreilles Potalas.', 'https://dragonball-api.com/transformaciones/Vegetto.webp', 'Guerrier Z', 3, NULL);
 INSERT INTO dbz.`characters`
 (id, name, ki, maxKi, race, gender, description, image, affiliation, planet_id, deletedAt)
-VALUES(68, 'Broly', '7 Quadrillion', '11 200 000 000 000 000 000 000 000', 'Saiyan', 'Male', 'Le Saiyan Légendaire doté d''une force brute dévastatrice et incontrôlable.', 'https://dragonball-api.com/transformaciones/Broly_DBS_Base.webp', 'Autre', 3, NULL);
+VALUES(32, 'Broly', '7 Quadrillion', '11 200 000 000 000 000 000 000 000', 'Saiyan', 'Male', 'Le Saiyan Légendaire doté d''une force brute dévastatrice et incontrôlable.', 'https://dragonball-api.com/transformaciones/Broly_DBS_Base.webp', 'Autre', 3, NULL);
 
 
 
@@ -252,10 +252,10 @@ INSERT INTO dbz.transformations
 VALUES(44, 'Cell Forme Parfait', 'https://static.wikia.nocookie.net/dragonball/images/9/94/Cell_%28Forme_parfaite%29.png/revision/latest/scale-to-width/360?cb=20190217200359&path-prefix=fr', '5.000.000.000', 9, NULL);
 INSERT INTO dbz.transformations
 (id, name, image, ki, character_id, deletedAt)
-VALUES(45, 'Super Saiyan', 'https://static.wikia.nocookie.net/dragonball/images/d/d3/Broly_%28DBS_-_Super_Saiyan%29.png/revision/latest/scale-to-width-down/340?cb=20181212234655&path-prefix=fr', '1.2 Quadrillion', 68, NULL);
+VALUES(45, 'Super Saiyan', 'https://static.wikia.nocookie.net/dragonball/images/d/d3/Broly_%28DBS_-_Super_Saiyan%29.png/revision/latest/scale-to-width-down/340?cb=20181212234655&path-prefix=fr', '1.2 Quadrillion', 32, NULL);
 INSERT INTO dbz.transformations
 (id, name, image, ki, character_id, deletedAt)
-VALUES(46, 'Super Saiyan Légendaire', 'https://static.wikia.nocookie.net/dragonball/images/3/38/Broly_%28DBS%29_Transform%C3%A9.png/revision/latest?cb=20180731173425&path-prefix=fr', '11.2 Septillion', 68, NULL);
+VALUES(46, 'Super Saiyan Légendaire', 'https://static.wikia.nocookie.net/dragonball/images/3/38/Broly_%28DBS%29_Transform%C3%A9.png/revision/latest?cb=20180731173425&path-prefix=fr', '11.2 Septillion', 32, NULL);
 INSERT INTO dbz.transformations
 (id, name, image, ki, character_id, deletedAt)
 VALUES(47, 'Super Saiyan', 'https://static.wikia.nocookie.net/dragonball/images/5/56/Trunks_du_Futur_%28Super_Saiyan_2%29_%28Artwork%29.png/revision/latest/scale-to-width-down/340?cb=20190426224552&path-prefix=fr', '2.500.000.000', 16, NULL);
